@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.IBookDAO">
+	<!--当数据库中字段名与实体类中属性名不一致时，需要显示定义字段映射  -->
+	<resultMap id="bookResultMap" type="vo.Book">
+		<id property="bookId" column="bookId" />
+		<result property="bookName" column="bookName" />
+		<result property="author" column="author" />
+		<result property="publisher" column="publisher" />
+		<result property="price" column="price" />
+		<result property="bookNum" column="bookNum" />
+	</resultMap>
+
+	
+	<sql id="bookColumns">bookId,bookName,author,publisher,price,bookNum,</sql>
+
+	<select id="get" parameterType="String" resultMap="bookResultMap">
+		select
+		<include refid="bookColumns"></include>
+		from book 
+		where bookId=#{bookId}
+	</select>
+
+	<select id="query" parameterType="vo.Book" resultMap="bookResultMap">
+		select
+		<include refid="bookColumns"></include>
+		from book
+		<where>
+			<if test="bookId!=null">
+				and bookId = #{bookId}
+			</if>
+			<if test="bookName!=null">
+				and bookName = #{bookName}
+			</if>
+			<if test="author!=null">
+				and author = #{author}
+			</if>
+			<if test="publisher!=null">
+				and publisher = #{publisher}
+			</if>
+			<if test="price!=null">
+				and price = #{price}
+			</if>
+			<if test="bookNum!=null">
+				and bookNum = #{bookNum}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="vo.Book">
+		insert into book(<include refid="bookColumns"></include>)
+		values(#{bookId},#{bookName},#{author},#{publisher},#{price},#{bookNum})
+	</insert>
+
+	<update id="update" parameterType="vo.Book">
+		update book
+		<set>
+			<if test="bookId!=null">
+				and bookId = #{bookId}
+			</if>
+			<if test="bookName!=null">
+				and bookName = #{bookName}
+			</if>
+			<if test="author!=null">
+				and author = #{author}
+			</if>
+			<if test="publisher!=null">
+				and publisher = #{publisher}
+			</if>
+			<if test="price!=null">
+				and price = #{price}
+			</if>
+			<if test="bookNum!=null">
+				and bookNum = #{bookNum}
+			</if>
+		</set>
+		where bookId=#{bookId}
+	</update>
+
+	<delete id="delete" parameterType="String">
+		delete from
+		book 
+		where bookId=#{bookId}
+	</delete>
+
+	
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="dao.IDetailsDAO">
+	<!--当数据库中字段名与实体类中属性名不一致时，需要显示定义字段映射  -->
+	<resultMap id="detailsResultMap" type="vo.Details">
+		<id property="eventCode" column="eventCode" />
+		<result property="userId" column="userId" />
+		<result property="bookId" column="bookId" />
+		<result property="bookNum" column="bookNum" />
+		<result property="eventTime" column="eventTime" />
+	</resultMap>
+
+	<sql id="detailsColumns"> 
+		eventCode,userId,bookId,bookNum,eventTime
+	</sql>
+
+	<select id="get" parameterType="String" resultMap="detailsResultMap">
+		select
+		<include refid="detailsColumns"></include>
+		from details 
+		where eventCode=#{eventCode}
+	</select>
+
+	<select id="query" parameterType="vo.details" resultMap="detailsResultMap">
+		select
+		<include refid="detailsColumns"></include>
+		from details
+		<where>
+			<if test="eventCode!=null">
+				and eventCode = #{eventCode}
+			</if>
+			<if test="userId!=null">
+				and userId = #{userId}
+			</if>
+			<if test="bookId!=null">
+				and bookId = #{bookId}
+			</if>
+			<if test="bookNum!=null">
+				and bookNum = #{bookNum}
+			</if>
+			<if test="eventTime!=null">
+				and eventTime = #{eventTime}
+			</if>
+		</where>
+	</select>
+
+	<insert id="insert" parameterType="vo.Details">
+		insert into details(<include refid="detailsColumns"></include>)
+		values(#{eventCode},#{userId},#{bookId},#{bookNum},#{eventTime})
+	</insert>
+
+	<update id="update" parameterType="vo.Details">
+		update details
+		<set>
+			<if test="eventCode!=null">
+				and eventCode = #{eventCode}
+			</if>
+			<if test="userId!=null">
+				and userId = #{userId}
+			</if>
+			<if test="bookId!=null">
+				and bookId = #{bookId}
+			</if>
+			<if test="bookNum!=null">
+				and bookNum = #{bookNum}
+			</if>
+			<if test="eventTime!=null">
+				and eventTime = #{eventTime}
+			</if>
+		</set>
+		where eventCode=#{eventCode}
+	</update>
+
+	<delete id="delete" parameterType="String">
+		delete from
+		details 
+		where eventCode=#{eventCode}
+	</delete>
+
+
+</mapper>
